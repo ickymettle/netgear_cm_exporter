@@ -66,9 +66,6 @@ modem.password foobaz
 ```
 ./netgear_exporter -config.file netgear_cm_exporter.conf
 ```
-## Running
-
-## Exported Metrics
 
 ## Contributing
 
