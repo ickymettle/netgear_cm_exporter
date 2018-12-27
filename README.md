@@ -13,9 +13,9 @@ These Netgear models have been tested and are officially supported:
 ## Usage
 
 ```
-Usage of netgear_exporter:
+Usage of netgear_cm_exporter:
   -config.file string
-    	Path to configuration file. (default "netgear_exporter.conf")
+    	Path to configuration file. (optional)
   -modem.address string
     	Cable modem admin administrative ip address and port. (default "192.168.100.1")
   -modem.password string
@@ -23,7 +23,7 @@ Usage of netgear_exporter:
   -modem.username string
     	Modem admin username. (default "admin")
   -telemetry.addr string
-    	Listen address for metrics endpoint. (default "localhost:9999")
+    	Listen address for metrics endpoint. (default "localhost:9526")
   -telemetry.path string
     	Path to metric exposition endpoint. (default "/metrics")
 ```
