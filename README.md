@@ -10,6 +10,14 @@ These Netgear models have been tested and are officially supported:
 
 * Netgear CM600
 
+## Installation
+
+You can build and install the exporter locally by running:
+
+```
+go get github.com/ickymettle/netgear_cm_exporter
+```
+
 ## Usage
 
 ```
