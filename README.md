@@ -31,7 +31,7 @@ Usage of netgear_cm_exporter:
   -modem.username string
     	Modem admin username. (default "admin")
   -telemetry.addr string
-    	Listen address for metrics endpoint. (default "localhost:9526")
+    	Listen address for metrics endpoint. (default "localhost:9527")
   -telemetry.path string
     	Path to metric exposition endpoint. (default "/metrics")
 ```

@@ -256,7 +256,7 @@ func main() {
 	var (
 		fs            = flag.NewFlagSet("netgear_cm_exporter", flag.ExitOnError)
 		showVersion   = fs.Bool("version", false, "Print version information.")
-		listenAddress = fs.String("telemetry.addr", "localhost:9526", "Listen address for metrics endpoint.")
+		listenAddress = fs.String("telemetry.addr", "localhost:9527", "Listen address for metrics endpoint.")
 		metricsPath   = fs.String("telemetry.path", "/metrics", "Path to metric exposition endpoint.")
 		modemAddress  = fs.String("modem.address", "192.168.100.1", "Cable modem admin administrative ip address and port.")
 		modemUsername = fs.String("modem.username", "admin", "Modem admin username.")
