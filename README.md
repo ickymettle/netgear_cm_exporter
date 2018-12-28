@@ -77,8 +77,8 @@ modem.password foobaz
 
 ## Grafana Dashboard
 
-A sample grafana dashboard can be found in the `grafana/` directory. You can import this into your Grafana
-instance to get up and running with a quick dashboard.
+A sample grafana dashboard can be found in the `grafana/` directory. You can import `netgear_cable_modem.json` into 
+your Grafana instance to get up and running with a quick dashboard.
 
 ![Grafana Dashboard Screenshot](/grafana/dashboard_screenshot.png)
 
