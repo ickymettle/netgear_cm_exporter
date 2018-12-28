@@ -14,9 +14,18 @@ import (
 	"github.com/gocolly/colly"
 	"github.com/peterbourgon/ff"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 const namespace = "netgear_cm"
+
+var (
+	version   string
+	revision  string
+	branch    string
+	buildUser string
+	buildDate string
+)
 
 type Exporter struct {
 	url, authHeaderValue string
@@ -243,6 +252,7 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 func main() {
 	var (
 		fs            = flag.NewFlagSet("netgear_cm_exporter", flag.ExitOnError)
+		showVersion   = fs.Bool("version", false, "Print version information.")
 		listenAddress = fs.String("telemetry.addr", "localhost:9526", "Listen address for metrics endpoint.")
 		metricsPath   = fs.String("telemetry.path", "/metrics", "Path to metric exposition endpoint.")
 		modemAddress  = fs.String("modem.address", "192.168.100.1", "Cable modem admin administrative ip address and port.")
@@ -257,6 +267,12 @@ func main() {
 		ff.WithEnvVarPrefix("NETGEAR_CM_EXPORTER"),
 	)
 
+	if *showVersion {
+		fmt.Printf("netgear_cm_exporter version=%s revision=%s branch=%s buildUser=%s buildDate=%s\n",
+			version, revision, branch, buildUser, buildDate)
+		os.Exit(0)
+	}
+
 	if *modemPassword == "" {
 		fmt.Println("ERROR: no password provided for modem")
 		fs.PrintDefaults()
@@ -267,7 +283,7 @@ func main() {
 
 	prometheus.MustRegister(exporter)
 
-	http.Handle(*metricsPath, prometheus.Handler())
+	http.Handle(*metricsPath, promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, *metricsPath, http.StatusMovedPermanently)
 	})
