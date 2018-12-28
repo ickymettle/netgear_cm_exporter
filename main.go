@@ -106,7 +106,7 @@ func NewExporter(addr, username, password string) *Exporter {
 			usLabelNames, nil,
 		),
 		usChannelSymbolRate: prometheus.NewDesc(
-			prometheus.BuildFQName(namespace, "upstream_channel", "power_symbol_rate"),
+			prometheus.BuildFQName(namespace, "upstream_channel", "symbol_rate"),
 			"Upstream channel symbol rate per second",
 			usLabelNames, nil,
 		),
@@ -160,29 +160,31 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 				unCorrErrs float64
 			)
 			row.Find("td").Each(func(j int, col *goquery.Selection) {
+				text := strings.TrimSpace(col.Text())
+
 				switch j {
 				case 0:
-					channel = strings.TrimSpace(col.Text())
+					channel = text
 				case 1:
-					lockStatus = strings.TrimSpace(col.Text())
+					lockStatus = text
 				case 2:
-					modulation = strings.TrimSpace(col.Text())
+					modulation = text
 				case 3:
-					channelID = strings.TrimSpace(col.Text())
+					channelID = text
 				case 4:
 					{
 						var freqHZ float64
-						fmt.Sscanf(strings.TrimSpace(col.Text()), "%f Hz", &freqHZ)
+						fmt.Sscanf(text, "%f Hz", &freqHZ)
 						freqMHz = fmt.Sprintf("%0.2f MHz", freqHZ/1e6)
 					}
 				case 5:
-					fmt.Sscanf(strings.TrimSpace(col.Text()), "%f dBmV", &power)
+					fmt.Sscanf(text, "%f dBmV", &power)
 				case 6:
-					fmt.Sscanf(strings.TrimSpace(col.Text()), "%f dB", &snr)
+					fmt.Sscanf(text, "%f dB", &snr)
 				case 7:
-					fmt.Sscanf(strings.TrimSpace(col.Text()), "%f", &corrErrs)
+					fmt.Sscanf(text, "%f", &corrErrs)
 				case 8:
-					fmt.Sscanf(strings.TrimSpace(col.Text()), "%f", &unCorrErrs)
+					fmt.Sscanf(text, "%f", &unCorrErrs)
 				}
 			})
 			labels := []string{channel, lockStatus, modulation, channelID, freqMHz}
@@ -210,29 +212,30 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 				power       float64
 			)
 			row.Find("td").Each(func(j int, col *goquery.Selection) {
+				text := strings.TrimSpace(col.Text())
 				switch j {
 				case 0:
-					channel = strings.TrimSpace(col.Text())
+					channel = text
 				case 1:
-					lockStatus = strings.TrimSpace(col.Text())
+					lockStatus = text
 				case 2:
-					channelType = strings.TrimSpace(col.Text())
+					channelType = text
 				case 3:
-					channelID = strings.TrimSpace(col.Text())
+					channelID = text
 				case 4:
 					{
 						var kSymRate float64
-						fmt.Sscanf(strings.TrimSpace(col.Text()), "%f Ksym/sec", &kSymRate)
+						fmt.Sscanf(text, "%f Ksym/sec", &kSymRate)
 						symbolRate = kSymRate * 1000 // convert to sym/sec
 					}
 				case 5:
 					{
 						var freqHZ float64
-						fmt.Sscanf(strings.TrimSpace(col.Text()), "%f Hz", &freqHZ)
+						fmt.Sscanf(text, "%f Hz", &freqHZ)
 						freqMHz = fmt.Sprintf("%0.2f MHz", freqHZ/1e6)
 					}
 				case 6:
-					fmt.Sscanf(strings.TrimSpace(col.Text()), "%f dBmV", &power)
+					fmt.Sscanf(text, "%f dBmV", &power)
 				}
 			})
 			labels := []string{channel, lockStatus, channelType, channelID, freqMHz}
