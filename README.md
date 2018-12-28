@@ -37,7 +37,7 @@ Usage of netgear_cm_exporter:
 ```
 
 The minimal set of command line flags are the IP address of your cable modem, and the admin password. This
-exporter supports a few different means of configuration options, you can chose what works best for your environment.
+exporter supports a few different means of setting configuration options, you can chose what works best for your environment.
 
 ### Configuring via command line flags
 
@@ -88,3 +88,6 @@ If you'd like me to try adding support please do the following:
    the admin UI. On the CM600 the URI is `/DocsisStatus.asp`.
 2. Once you're found the URI to the admin page, send me the saved HTML from that page and I can
    look at what changes are needed to the scraper to support your model.
+   
+If you do get this running without modification on a CMxxx modem other than the CM600 please submit
+a PR to add your model to the list of supported models.
