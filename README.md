@@ -28,7 +28,7 @@ Usage of ./netgear_cm_exporter:
     	Print version information.
 ```
 
-An example configuration file is provided in `example_config.yml` showing all the possible
+An example configuration file is provided in `netgear_cm_exporter.yml` showing all the possible
 configuration options. The values in the example are the defaults, the bare minimum configuration
 is the administrative password to your modem:
 
