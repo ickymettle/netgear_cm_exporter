@@ -16,10 +16,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-const (
-	namespace = "netgear_cm"
-	version   = "0.1.0"
-)
+const namespace = "netgear_cm"
 
 type Exporter struct {
 	url, authHeaderValue string
@@ -250,7 +247,7 @@ func main() {
 		metricsPath   = fs.String("telemetry.path", "/metrics", "Path to metric exposition endpoint.")
 		modemAddress  = fs.String("modem.address", "192.168.100.1", "Cable modem admin administrative ip address and port.")
 		modemUsername = fs.String("modem.username", "admin", "Modem admin username.")
-		modemPassword = fs.String("modem.password", "", "Modem admin password.")
+		modemPassword = fs.String("modem.password", "", "Modem admin password. (required)")
 		_             = fs.String("config.file", "", "Path to configuration file. (optional)")
 	)
 
@@ -259,6 +256,12 @@ func main() {
 		ff.WithConfigFileParser(ff.PlainParser),
 		ff.WithEnvVarPrefix("NETGEAR_CM_EXPORTER"),
 	)
+
+	if *modemPassword == "" {
+		fmt.Println("ERROR: no password provided for modem")
+		fs.PrintDefaults()
+		os.Exit(1)
+	}
 
 	exporter := NewExporter(*modemAddress, *modemUsername, *modemPassword)
 
