@@ -75,6 +75,13 @@ modem.password foobaz
 ./netgear_exporter -config.file netgear_cm_exporter.conf
 ```
 
+## Grafana Dashboard
+
+A sample grafana dashboard can be found in the `grafana/` directory. You can import this into your Grafana
+instance to get up and running with a quick dashboard.
+
+![Grafana Dashboard Screenshot](/grafana/dashboard_screenshot.png)
+
 ## Contributing
 
 For the most part I assume the status pages for most of the modems in the CMxxxx family to be
