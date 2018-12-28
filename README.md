@@ -21,58 +21,20 @@ go get github.com/ickymettle/netgear_cm_exporter
 ## Usage
 
 ```
-Usage of netgear_cm_exporter:
+Usage of ./netgear_cm_exporter:
   -config.file string
-    	Path to configuration file. (optional)
-  -modem.address string
-    	Cable modem admin administrative ip address and port. (default "192.168.100.1")
-  -modem.password string
-    	Modem admin password.
-  -modem.username string
-    	Modem admin username. (default "admin")
-  -telemetry.addr string
-    	Listen address for metrics endpoint. (default "localhost:9527")
-  -telemetry.path string
-    	Path to metric exposition endpoint. (default "/metrics")
+    	Path to configuration file. (default "netgear_cm_exporter.yml")
+  -version
+    	Print version information.
 ```
 
-The minimal set of command line flags are the IP address of your cable modem, and the admin password. This
-exporter supports a few different means of setting configuration options, you can chose what works best for your environment.
-
-### Configuring via command line flags
-
-```
-./netgear_cm_exporter -modem.address 10.0.0.1 -modem.username admin -modem.password foobaz
-```
-
-### Configuring via environment variables
-
-Each command line flag can be set in the environment by prefixing the flag with `NETGEAR_CM_EXPORTER` and
-providing the command line flag name in uppercase.
-
-eg.
+An example configuration file is provided in `example_config.yml` showing all the possible
+configuration options. The values in the example are the defaults, the bare minimum configuration
+is the administrative password to your modem:
 
 ```
-export NETGEAR_CM_EXPORTER_MODEM_ADDRESS=10.0.0.1
-export NETGEAR_CM_EXPORTER_MODEM_USERNAME=admin
-export NETGEAR_CM_EXPORTER_MODEM_PASSWORD=foobaz
-```
-
-### Configuring via config file
-
-Lastly if you prefer you can write a config file with each option listed per line in key value pairs delimited by
-spaces.
-
-eg. create a file `netgear_cm_exporter.conf` with the following contents:
-
-```
-modem.address 10.0.0.1
-modem.username admin
-modem.password foobaz
-```
-
-```
-./netgear_exporter -config.file netgear_cm_exporter.conf
+modem:
+  password: <your password here>
 ```
 
 ## Grafana Dashboard

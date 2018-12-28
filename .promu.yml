@@ -5,7 +5,6 @@ build:
         - name: netgear_cm_exporter
     flags: -mod=vendor -a
     ldflags: |
-        -X main.buildInfo.Version={{.Version}}
         -X main.version={{.Version}}
         -X main.revision={{.Revision}}
         -X main.branch={{.Branch}}

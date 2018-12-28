@@ -12,7 +12,6 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/gocolly/colly"
-	"github.com/peterbourgon/ff"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
@@ -139,6 +138,7 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 
 	// OnError callback counts any errors that occur during scraping.
 	c.OnError(func(r *colly.Response, err error) {
+		log.Printf("scrape failed: %d %s", r.StatusCode, http.StatusText(r.StatusCode))
 		e.scrapeErrors.Inc()
 	})
 
@@ -254,21 +254,10 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 
 func main() {
 	var (
-		fs            = flag.NewFlagSet("netgear_cm_exporter", flag.ExitOnError)
-		showVersion   = fs.Bool("version", false, "Print version information.")
-		listenAddress = fs.String("telemetry.addr", "localhost:9527", "Listen address for metrics endpoint.")
-		metricsPath   = fs.String("telemetry.path", "/metrics", "Path to metric exposition endpoint.")
-		modemAddress  = fs.String("modem.address", "192.168.100.1", "Cable modem admin administrative ip address and port.")
-		modemUsername = fs.String("modem.username", "admin", "Modem admin username.")
-		modemPassword = fs.String("modem.password", "", "Modem admin password. (required)")
-		_             = fs.String("config.file", "", "Path to configuration file. (optional)")
+		configFile  = flag.String("config.file", "netgear_cm_exporter.yml", "Path to configuration file.")
+		showVersion = flag.Bool("version", false, "Print version information.")
 	)
-
-	ff.Parse(fs, os.Args[1:],
-		ff.WithConfigFileFlag("config.file"),
-		ff.WithConfigFileParser(ff.PlainParser),
-		ff.WithEnvVarPrefix("NETGEAR_CM_EXPORTER"),
-	)
+	flag.Parse()
 
 	if *showVersion {
 		fmt.Printf("netgear_cm_exporter version=%s revision=%s branch=%s buildUser=%s buildDate=%s\n",
@@ -276,23 +265,22 @@ func main() {
 		os.Exit(0)
 	}
 
-	if *modemPassword == "" {
-		fmt.Println("ERROR: no password provided for modem")
-		fs.PrintDefaults()
-		os.Exit(1)
+	config, err := NewConfigFromFile(*configFile)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	exporter := NewExporter(*modemAddress, *modemUsername, *modemPassword)
+	exporter := NewExporter(config.Modem.Address, config.Modem.Username, config.Modem.Password)
 
 	prometheus.MustRegister(exporter)
 
-	http.Handle(*metricsPath, promhttp.Handler())
+	http.Handle(config.Telemetry.MetricsPath, promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, *metricsPath, http.StatusMovedPermanently)
+		http.Redirect(w, r, config.Telemetry.MetricsPath, http.StatusMovedPermanently)
 	})
 
-	log.Printf("exporter listening on %s", *listenAddress)
-	if err := http.ListenAndServe(*listenAddress, nil); err != nil {
+	log.Printf("exporter listening on %s", config.Telemetry.ListenAddress)
+	if err := http.ListenAndServe(config.Telemetry.ListenAddress, nil); err != nil {
 		log.Fatalf("failed to start netgear exporter: %s", err)
 	}
 }
