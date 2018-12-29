@@ -47,8 +47,8 @@ type Exporter struct {
 	usChannelSymbolRate *prometheus.Desc
 }
 
-// basicAuth returns the base64 encoding of the username and password seperated by
-// a colon. Borrowed the net/http package.
+// basicAuth returns the base64 encoding of the username and password
+// separated by a colon. Borrowed the net/http package.
 func basicAuth(username, password string) string {
 	auth := fmt.Sprintf("%s:%s", username, password)
 	return base64.StdEncoding.EncodeToString([]byte(auth))
