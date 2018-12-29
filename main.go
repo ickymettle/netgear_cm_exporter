@@ -26,6 +26,7 @@ var (
 	buildDate string
 )
 
+// Exporter represents an instance of the Netgear cable modem exporter.
 type Exporter struct {
 	url, authHeaderValue string
 
@@ -53,6 +54,8 @@ func basicAuth(username, password string) string {
 	return base64.StdEncoding.EncodeToString([]byte(auth))
 }
 
+// NewExporter returns an instance of Exporter configured with the modem's
+// address, admin username and password.
 func NewExporter(addr, username, password string) *Exporter {
 	var (
 		dsLabelNames = []string{"channel", "lock_status", "modulation", "channel_id", "frequency"}
@@ -112,6 +115,7 @@ func NewExporter(addr, username, password string) *Exporter {
 	}
 }
 
+// Describe returns Prometheus metric descriptions for the exporter metrics.
 func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 	// Exporter metrics.
 	ch <- e.totalScrapes.Desc()
@@ -126,6 +130,7 @@ func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
 	ch <- e.usChannelSymbolRate
 }
 
+// Collect runs our scrape loop returning each Prometheus metric.
 func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 	e.totalScrapes.Inc()
 
@@ -224,9 +229,8 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 					channelID = text
 				case 4:
 					{
-						var kSymRate float64
-						fmt.Sscanf(text, "%f Ksym/sec", &kSymRate)
-						symbolRate = kSymRate * 1000 // convert to sym/sec
+						fmt.Sscanf(text, "%f Ksym/sec", &symbolRate)
+						symbolRate = symbolRate * 1000 // convert to sym/sec
 					}
 				case 5:
 					{

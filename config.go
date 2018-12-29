@@ -8,22 +8,27 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
+// Modem represents the address of the modem and its admin credentials.
 type Modem struct {
 	Address  string `yaml:"address"`
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 }
 
+// Telemetry represents the exporter's listen address and metrics URI path.
 type Telemetry struct {
 	ListenAddress string `yaml:"listen_address"`
 	MetricsPath   string `yaml:"metrics_path"`
 }
 
+// Config represents the yaml config file structure.
 type Config struct {
 	Modem     Modem     `yaml:"modem"`
 	Telemetry Telemetry `yaml:"telemetry"`
 }
 
+// NewConfigFromFile reads the configuration file from the given path
+// and returns a populated Config struct.
 func NewConfigFromFile(path string) (*Config, error) {
 	content, err := ioutil.ReadFile(path)
 	if err != nil {
