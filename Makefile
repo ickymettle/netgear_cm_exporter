@@ -5,10 +5,14 @@ ifndef VERBOSE
 endif
 
 # version info
-VERSION := $(shell cat VERSION) GIT_COMMIT := $(shell git rev-parse --short HEAD) GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD) BUILD_USER := $(USER)@$(HOSTNAME)
+VERSION := $(shell cat VERSION)
+GIT_COMMIT := $(shell git rev-parse --short HEAD)
+GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
+BUILD_USER := $(USER)@$(HOSTNAME)
 BUILD_DATE := $(shell date +"%FT%T")
 
 # go command flags
+export GO111MODULE=on
 GOFLAGS := -v
 
 # linker flags
@@ -38,7 +42,8 @@ vet:
 
 staticcheck:
 	echo ">> $@"
-	staticcheck $(SRC_PACKAGES)
+	# staticcheck doesn't quite support modules yet
+	#staticcheck $(SRC_PACKAGES)
 
 ci: lint vet staticcheck test
 
