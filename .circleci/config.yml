@@ -6,15 +6,25 @@ executors:
     - image: circleci/golang:1.11
 
 jobs:
-  test:
+  build:
     executor: golang
     steps:
       - checkout
       - run: make prereq
       - run: make ci
+      - run: make build
+
+  release:
+    executor: golang
+    steps:
+      - checkout
+      - run: make prereq
+      - run: make cross-compile
 
 workflows:
   version: 2
   netgear_cm_exporter:
     jobs:
-    - test
+    - build
+    - release
+

@@ -11,6 +11,12 @@ GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 BUILD_USER := $(USER)@$(HOSTNAME)
 BUILD_DATE := $(shell date +"%FT%T")
 
+# cross compile settings
+XC_OUTPUT := _builds/{{.Dir}}_v$(VERSION)_{{.OS}}_{{.Arch}}
+XC_OS     := linux darwin freebsd
+XC_ARCH   := amd64 386
+XC_OSARCH := linux/arm linux/mipsle
+
 # go command flags
 export GO111MODULE=on
 GOFLAGS := -v
@@ -24,7 +30,7 @@ LDFLAGS += -X main.buildDate=$(BUILD_DATE)
 
 SRC_PACKAGES := $(shell go list ./...)
 
-build: test
+build:
 	echo ">> $@"
 	go build $(GOFLAGS) -ldflags "$(LDFLAGS)" .
 
@@ -47,9 +53,14 @@ staticcheck:
 
 ci: lint vet staticcheck test
 
+cross-compile:
+	gox -verbose -output $(XC_OUTPUT) -os "$(XC_OS)" -arch "$(XC_ARCH)" -osarch "$(XC_OSARCH)"
+
 prereq:
 	go get -u golang.org/x/lint/golint
 	go get -u honnef.co/go/tools/cmd/staticcheck
+	go get -u github.com/mitchellh/gox
+	go get -u github.com/tcnksm/ghr
 
 clean:
-	rm -f $(BINARY)
+	rm -rf netgear_cm_exporter _builds
