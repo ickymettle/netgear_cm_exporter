@@ -42,8 +42,7 @@ vet:
 
 staticcheck:
 	echo ">> $@"
-	# staticcheck doesn't quite support modules yet
-	#staticcheck $(SRC_PACKAGES)
+	staticcheck $(SRC_PACKAGES)
 
 ci: lint vet staticcheck test
 
