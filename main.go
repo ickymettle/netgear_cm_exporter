@@ -64,7 +64,7 @@ func NewExporter(addr, username, password string) *Exporter {
 
 	return &Exporter{
 		// Modem access details.
-		url:             "http://" + addr + "/DocsisStatus.asp",
+		url:             "http://" + addr + "/DocsisStatus.htm",
 		authHeaderValue: "Basic " + basicAuth(username, password),
 
 		// Collection metrics.
