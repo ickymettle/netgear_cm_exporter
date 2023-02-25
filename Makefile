@@ -32,10 +32,6 @@ test:
 	echo ">> $@"
 	go test -race $(GOFLAGS) ./...
 
-lint:
-	echo ">> $@"
-	golint -set_exit_status $(SRC_PACKAGES)
-
 vet:
 	echo ">> $@"
 	go vet $(SRC_PACKAGES)
@@ -44,11 +40,10 @@ staticcheck:
 	echo ">> $@"
 	staticcheck $(SRC_PACKAGES)
 
-ci: lint vet staticcheck test
+ci: vet staticcheck test
 
 prereq:
-	go get -u golang.org/x/lint/golint
-	go get -u honnef.co/go/tools/cmd/staticcheck
+	go install honnef.co/go/tools/cmd/staticcheck@2023.1.2
 
 clean:
 	rm -f $(BINARY)
