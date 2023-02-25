@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	"github.com/pkg/errors"
 	yaml "gopkg.in/yaml.v2"
@@ -30,7 +30,7 @@ type Config struct {
 // NewConfigFromFile reads the configuration file from the given path
 // and returns a populated Config struct.
 func NewConfigFromFile(path string) (*Config, error) {
-	content, err := ioutil.ReadFile(path)
+	content, err := os.ReadFile(path)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to read config file")
 	}
