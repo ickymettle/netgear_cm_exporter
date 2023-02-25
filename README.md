@@ -4,7 +4,8 @@
 
 This project is now archived, unfortunately I no longer have access to a Netgear CMxxx series modem
 making it very difficult to support this code without a device to test it on. Thanks everyone for your
-support with this.
+support with this. As of 2023-02-25 i've updated the dependencies and confirmed it still builds clean
+on golang 1.20.1.
 
 ---
 
