@@ -24,7 +24,9 @@ LDFLAGS += -X main.buildDate=$(BUILD_DATE)
 
 SRC_PACKAGES := $(shell go list ./...)
 
-build: test
+all: test build
+
+build:
 	echo ">> $@"
 	go build $(GOFLAGS) -ldflags "$(LDFLAGS)" .
 
