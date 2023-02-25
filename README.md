@@ -2,6 +2,12 @@
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/ickymettle/netgear_cm_exporter)](https://goreportcard.com/report/github.com/ickymettle/netgear_cm_exporter)
 
+This project is now archived, unfortunately I no longer have access to a Netgear CMxxx series modem
+making it very difficult to support this code without a device to test it on. Thanks everyone for your
+support with this.
+
+---
+
 Prometheus exporter for Netgear cable modems. This has been developed against a CM600, I suspect it
 is likely to work with other modems in the CMxxxx family. If you are able to run this successfully
 on another Netgear cable modem model, please see the contributing section below.
